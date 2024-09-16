@@ -1,0 +1,18 @@
+None
+Navegador (Predeterminado)
+Visual Studio Code
+GitHub (Web)
+Figma
+GIMP
+Blender
+Notion
+Slack
+Zoom
+Postman
+Docker
+Krita
+Audacity
+Spotify (Web)
+Spotify (App)
+You Tube Music (Web)
+You Tube Music (App)
