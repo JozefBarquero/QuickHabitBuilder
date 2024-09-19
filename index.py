@@ -28,12 +28,57 @@ def create_option_menu(root, text, var, options):
     frame.pack(side=tk.TOP, anchor='w')
     var.trace_add("write", update_values)
 
+verfi = False
+    
 def buttonClick():
-    # Guardar los valores en un archivo
-    with open('valores.json', 'w') as file:
-        json.dump(list(valores), file)
-    subprocess.run(["python3", "create.py"])
+    global verfi
+    if "Navegador (Predeterminado)" in valores and verfi == False:
+        links()
+    else:
+        verfi = False
+        # Guardar los valores en un archivo
+        with open('valores.json', 'w') as file:
+            json.dump(list(valores), file)
+        subprocess.run(["python3", "create.py"])
+        
+        with open('valores_link.json', 'w') as file:
+            json.dump(list(values), file)
+        subprocess.run(["python3", "create.py"])
 
+
+#Si pusieron navegador
+def create_option_link_menu(root, text, var):
+    frame = tk.Frame(root)
+    label = tk.Label(frame, text=text, font=("Arial", 12), fg="black")
+    label.pack(side=tk.LEFT, padx=5, pady=5)
+    entry = tk.Entry(frame, textvariable=var, font=("Arial", 12), fg="black")
+    entry.pack(side=tk.RIGHT, padx=5, pady=3, anchor='w', expand=True, fill='x')
+    frame.pack(side=tk.TOP, anchor='w', expand=True, fill='both')
+    
+def links():
+    global verfi
+    root = tk.Tk()
+    root.title("QuickHabit Builder")
+    center_window(root, 500, 300)
+    
+    label = tk.Label(root, text="¿Deseas que tu navegador se inicie con algunas páginas?", font=("Arial", 12), fg="black")
+    label.pack()
+    
+    vars = [tk.StringVar(value="https://ejemplo.com") for _ in range(4)]
+    labels = ["Link 1:", "Link 2:", "Link 3:", "Link 4:"]
+    
+    for label, var in zip(labels, vars):
+        create_option_link_menu(root, label, var)
+
+    global values
+    values = [var.get() for var in vars]
+    
+    verfi = True
+    button = tk.Button(root, text="Proceder", command=buttonClick)
+    button.pack()
+    
+    root.mainloop()
+    
 root = tk.Tk()
 root.title("QuickHabit Builder")
 center_window(root, 800, 600)
