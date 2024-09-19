@@ -39,7 +39,6 @@ def buttonClick():
         # Guardar los valores en un archivo
         with open('valores.json', 'w') as file:
             json.dump(list(valores), file)
-        subprocess.run(["python3", "create.py"])
         
         with open('valores_link.json', 'w') as file:
             json.dump(list(values), file)
@@ -54,30 +53,33 @@ def create_option_link_menu(root, text, var):
     entry = tk.Entry(frame, textvariable=var, font=("Arial", 12), fg="black")
     entry.pack(side=tk.RIGHT, padx=5, pady=3, anchor='w', expand=True, fill='x')
     frame.pack(side=tk.TOP, anchor='w', expand=True, fill='both')
-    
+ 
+def cerrar_dos(ventana):
+    ventana.destroy()  
+    buttonClick() 
+  
 def links():
     global verfi
-    root = tk.Tk()
-    root.title("QuickHabit Builder")
-    center_window(root, 500, 300)
+    dos_ventana = tk.Toplevel(root)
+    dos_ventana.title("QuickHabit Builder")
+    center_window(dos_ventana, 500, 350)
     
-    label = tk.Label(root, text="¿Deseas que tu navegador se inicie con algunas páginas?", font=("Arial", 12), fg="black")
+    label = tk.Label(dos_ventana, text="¿Deseas que tu navegador se inicie con algunas páginas?", font=("Arial", 12), fg="black")
     label.pack()
     
     vars = [tk.StringVar(value="https://ejemplo.com") for _ in range(4)]
     labels = ["Link 1:", "Link 2:", "Link 3:", "Link 4:"]
     
     for label, var in zip(labels, vars):
-        create_option_link_menu(root, label, var)
+        create_option_link_menu(dos_ventana, label, var)
 
     global values
     values = [var.get() for var in vars]
     
     verfi = True
-    button = tk.Button(root, text="Proceder", command=buttonClick)
+    button = tk.Button(dos_ventana, text="Proceder", command=lambda: cerrar_dos(dos_ventana))
     button.pack()
     
-    root.mainloop()
     
 root = tk.Tk()
 root.title("QuickHabit Builder")
