@@ -6,11 +6,7 @@ Figma
 GIMP
 Blender
 Notion
-Slack
 Zoom
-Postman
-Docker
-Krita
 Audacity
 Spotify (Web)
 Spotify (App)

@@ -1,6 +1,11 @@
 import tkinter as tk
 import subprocess
+import platform
 import json  
+
+#definir
+values = []
+verfi = False
 
 def center_window(window, width, height):
     screen_width = window.winfo_screenwidth()
@@ -27,22 +32,6 @@ def create_option_menu(root, text, var, options):
     option_menu.pack(side=tk.LEFT, padx=5, pady=5)
     frame.pack(side=tk.TOP, anchor='w')
     var.trace_add("write", update_values)
-
-verfi = False
-    
-def buttonClick():
-    global verfi
-    if "Navegador (Predeterminado)" in valores and verfi == False:
-        links()
-    else:
-        verfi = False
-        # Guardar los valores en un archivo
-        with open('valores.json', 'w') as file:
-            json.dump(list(valores), file)
-        
-        with open('valores_link.json', 'w') as file:
-            json.dump(list(values), file)
-        subprocess.run(["python3", "create.py"])
 
 
 #Si pusieron navegador
@@ -79,9 +68,32 @@ def links():
     verfi = True
     button = tk.Button(dos_ventana, text="Proceder", command=lambda: cerrar_dos(dos_ventana))
     button.pack()
+  
+def buttonClick():
+    global verfi
+    global values
     
-    
+    if "Navegador (Predeterminado)" in valores and verfi == False:
+        links()
+    else:
+        verfi = False
+        # Guardar valores
+        with open('valores.json', 'w') as file:
+            json.dump(list(valores), file)
+        
+        with open('valores_link.json', 'w') as file:
+            json.dump(list(values), file)
+            
+            sistema = platform.system()
+            
+            if sistema == 'Windows':
+                subprocess.run(["python", "create.py"])
+            else:
+                subprocess.run(["python3", "create.py"])
+
+#Ventanas    
 root = tk.Tk()
+root.protocol("WM_DELETE_WINDOW", root.quit)
 root.title("QuickHabit Builder")
 center_window(root, 800, 600)
 
@@ -103,12 +115,14 @@ submenu2.add_command(label="Oscuro")
 label = tk.Label(root, text="Elija qué aplicaciones desea ejecutar.", font=("Arial", 16), fg="black")
 label.pack()
 
+#traer programas
 def read_options(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         return [line.strip() for line in file]
 
 options = read_options('programas.txt')
 
+#campos escoger
 var1 = tk.StringVar(value=options[0])
 var2 = tk.StringVar(value=options[0])
 var3 = tk.StringVar(value=options[0])
