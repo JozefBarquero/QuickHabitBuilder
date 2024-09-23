@@ -2,11 +2,18 @@ import tkinter as tk
 import subprocess
 import platform
 import json
+import os
+import sys
 
 # definir
 values = []
 verfi = False
 vacio = False
+
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.dirname(__file__), relative_path)
 
 def center_window(window, width, height):
     screen_width = window.winfo_screenwidth()
@@ -105,10 +112,12 @@ def buttonClick():
                 
             sistema = platform.system()
             
+            create_script = resource_path('create.py')
+            
             if sistema == 'Windows':
-                subprocess.run(["python", "create.py"])
+                subprocess.run(["python", create_script])
             else:
-                subprocess.run(["python3", "create.py"])
+                subprocess.run(["python3", create_script])
 
 # cambiar a claro
 def set_light_theme():
@@ -174,11 +183,13 @@ submenu2.add_command(label="Oscuro", command=set_dark_theme)
 label = tk.Label(root, text="Elija qué aplicaciones desea ejecutar.", font=("Arial", 16, "bold"), fg=fg_color, bg=bg_color)
 label.pack(pady=20)
 
+
+
 def read_options(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         return [line.strip() for line in file]
 
-options = read_options('programas.txt')
+options = read_options(resource_path('programas.txt'))
 
 var1 = tk.StringVar(value=options[0])
 var2 = tk.StringVar(value=options[0])

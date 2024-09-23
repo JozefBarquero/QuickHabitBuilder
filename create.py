@@ -3,6 +3,7 @@ import platform
 import os
 from tkinter import filedialog
 import json
+import tempfile
 
 root = tk.Tk()
 root.withdraw()
@@ -157,7 +158,7 @@ def open_program(command):
 {link4_f}
 
 
-# Script creado por QuickHabit Builder. PARA LINUX
+# Script creado por QuickHabit Builder. PARA Windows
 # 2024 - https://github.com/JozefBarquero/QuickHabitBuilder
 # ver BETA 1.0.0
 EOF
