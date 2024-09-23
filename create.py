@@ -25,42 +25,109 @@ def read_values():
         datos = json.load(file)
     
 def read_values_link():
-    try:
-        with open('valores_link.json', 'r') as file:
-            content = file.read().strip()
-            if not content:
-                return {}
-            return json.loads(content)
-    except json.JSONDecodeError:
-        return {}
-    except FileNotFoundError:
-        return {}
-    except Exception as e:
-        print(f"Error inesperado: {e}")
-        return {}
+    with open('valores_link.json', 'r') as file:
+        global datos_link
+        datos_link = json.load(file)
 
 # Traer datos
 read_values()
-valores_link = read_values_link()
+read_values_link()
 
+
+print(datos_link)
 print(datos)
 print(sistema)
 
+datos_link = datos_link[:4]
 datos = datos[:6] 
 
-def guardar():
-    # Obtener la ruta del escritorio
-    escritorio = os.path.join(os.path.expanduser("~"), "Desktop")
-    ruta_save = filedialog.asksaveasfilename(initialdir=escritorio, defaultextension=".pyw", filetypes=[("Python Files", "*.pyw")])
-    
-    if ruta_save:
-        contenido = f'''
-#!/usr/bin/env python3
+#generar links
+link1, link2, link3, link4 = "", "", "", ""
+link1_f, link2_f, link3_f, link4_f = "", "", "", ""
 
+for i in range(len(datos_link)):
+    if i == 0:
+        link1 = datos_link[i]
+    elif i == 1:
+        link2 = datos_link[i]
+    elif i == 2:
+        link3 = datos_link[i]
+    elif i == 3:
+        link4 = datos_link[i]
+
+
+
+
+def guardar():
+    
+    if sistema == 'Windows':
+        escritorio = os.path.join(os.path.expanduser("~"), "Desktop")
+        ruta_save = filedialog.asksaveasfilename(initialdir=escritorio, defaultextension=".pyw", filetypes=[("Python Files", "*.pyw")])
+        
+        if ruta_save:
+            contenido = f'''
+    #!/usr/bin/env python3
+
+    import subprocess
+    import webbrowser
+    import os
+    import platform
+
+    def run_command(command):
+        if platform.system() == "Windows":
+            return subprocess.run(command, creationflags=subprocess.CREATE_NO_WINDOW)
+        else:
+            return subprocess.run(command)
+
+    def open_program(command):
+        if platform.system() == "Windows":
+            return subprocess.Popen(command, creationflags=subprocess.CREATE_NO_WINDOW)
+        else:
+            return subprocess.Popen(command)
+
+    #Programas
+    {dato1}
+    {dato2}
+    {dato3}
+    {dato4}
+    {dato5}
+    {dato6}
+
+    #Links
+    {link1_f}
+    {link2_f}
+    {link3_f}
+    {link4_f}
+
+
+    # Script creado por QuickHabit Builder. PARA WINDOWS
+    # 2024 - https://github.com/JozefBarquero/QuickHabitBuilder
+    # ver BETA 1.0.0
+            '''
+            with open(ruta_save, "w", encoding="utf-8") as archivo:
+                archivo.write(contenido)
+                    
+        if root.winfo_exists():
+            root.destroy()
+        global root2
+        if 'root2' in globals() and root2.winfo_exists():
+            root2.destroy()
+    
+    if sistema == 'Linux':
+        home = os.path.expanduser("~")
+        escritorio2 = os.path.join(home, "Escritorio")
+        if not os.path.exists(escritorio2):
+            escritorio2 = os.path.join(home, "Desktop")
+        ruta_save = filedialog.asksaveasfilename(initialdir=escritorio2, defaultextension=".sh", filetypes=[("Bash Files", "*.sh")])
+        
+        if ruta_save:
+            contenido = f'''
+#!/bin/bash
+
+python3 - <<EOF
 import subprocess
 import webbrowser
 import os
-
 import platform
 
 def run_command(command):
@@ -75,6 +142,7 @@ def open_program(command):
     else:
         return subprocess.Popen(command)
 
+#Programas
 {dato1}
 {dato2}
 {dato3}
@@ -82,17 +150,25 @@ def open_program(command):
 {dato5}
 {dato6}
 
-# Script creado por QuickHabit Builder.
+#Links
+{link1_f}
+{link2_f}
+{link3_f}
+{link4_f}
+
+
+# Script creado por QuickHabit Builder. PARA LINUX
 # 2024 - https://github.com/JozefBarquero/QuickHabitBuilder
-# ver 1.0.0
+# ver BETA 1.0.0
+EOF
         '''
-        with open(ruta_save, "w", encoding="utf-8") as archivo:
-            archivo.write(contenido)
-            
-    if root.winfo_exists():
-        root.destroy()
-    if root2.winfo_exists():
-        root2.destroy()
+            with open(ruta_save, "w", encoding="utf-8") as archivo:
+                archivo.write(contenido)
+                    
+        if root.winfo_exists():
+            root.destroy()
+        if 'root2' in globals() and root2.winfo_exists():
+            root2.destroy()
 
             
 #Para windows extra compatibilidad:
@@ -199,11 +275,11 @@ def incompa():
         label = tk.Label(root2, text="Lo sentimos, seleccionaste algunos programas incompatibles con tu sistema operativo.", font=("Arial", 12), fg="black")
         label.pack()
 
-        label = tk.Label(root2, text="Programas incompatibles en tu sistema:", font=("Arial", 10), fg="black")
+        label = tk.Label(root2, text="Programas incompatibles en tu sistema:", font=("Arial", 12), fg="black")
         label.pack()
-        label = tk.Label(root2, text="- Figma", font=("Arial", 12), fg="black")
+        label = tk.Label(root2, text="- Figma", font=("Arial", 11), fg="black")
         label.pack()
-        label = tk.Label(root2, text="- You Tube Music (App)", font=("Arial", 12), fg="black")
+        label = tk.Label(root2, text="- You Tube Music (App)", font=("Arial", 11), fg="black")
         label.pack()
 
         label = tk.Label(root2, text="¿Continuar ignorando esos programas?", font=("Arial", 12), fg="black")
@@ -216,11 +292,26 @@ def incompa():
 
 def proceso():
     global root2
+    global link1_f, link2_f, link3_f, link4_f
     if 'root2' in globals() and root2.winfo_exists():
         root2.destroy()
 
     print("Proceso ejecutado")
     global proceso    
+    
+    #links generador
+    if link1 != '':
+        link1_f = f"webbrowser.open('{link1}')"
+        
+    if link2 != '':
+        link2_f = f"webbrowser.open('{link2}')"
+        
+    if link3 != '':
+        link3_f = f"webbrowser.open('{link3}')"
+    
+    if link4_f != '':
+        link4_f = f"webbrowser.open('{link4}')"
+        
     # Preestablecidos
     for i in range(len(datos)):
         if datos[i] == "Navegador (Predeterminado)":
@@ -285,7 +376,7 @@ def proceso():
             if sistema == 'Windows':
                 datos[i] = spotify
             elif sistema == 'Linux':
-                datos[i] = 'subprocess.Popen(["/usr/bin/spotify"])'
+                datos[i] = "subprocess.run(['xdg-open', 'spotify://'], check=True)"
 
     for i in range(len(datos)):
         if datos[i] == "You Tube Music (Web)":
