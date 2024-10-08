@@ -67,43 +67,43 @@ def guardar():
         
         if ruta_save:
             contenido = f'''
-    #!/usr/bin/env python3
+#!/usr/bin/env python3
 
-    import subprocess
-    import webbrowser
-    import os
-    import platform
+import subprocess
+import webbrowser
+import os
+import platform
 
-    def run_command(command):
-        if platform.system() == "Windows":
-            return subprocess.run(command, creationflags=subprocess.CREATE_NO_WINDOW)
-        else:
-            return subprocess.run(command)
+def run_command(command):
+    if platform.system() == "Windows":
+        return subprocess.run(command, creationflags=subprocess.CREATE_NO_WINDOW)
+    else:
+        return subprocess.run(command)
 
-    def open_program(command):
-        if platform.system() == "Windows":
-            return subprocess.Popen(command, creationflags=subprocess.CREATE_NO_WINDOW)
-        else:
-            return subprocess.Popen(command)
+def open_program(command):
+    if platform.system() == "Windows":
+        return subprocess.Popen(command, creationflags=subprocess.CREATE_NO_WINDOW)
+    else:
+        return subprocess.Popen(command)
 
-    #Programas
-    {dato1}
-    {dato2}
-    {dato3}
-    {dato4}
-    {dato5}
-    {dato6}
+#Programas
+{dato1}
+{dato2}
+{dato3}
+{dato4}
+{dato5}
+{dato6}
 
-    #Links
-    {link1_f}
-    {link2_f}
-    {link3_f}
-    {link4_f}
+#Links
+{link1_f}
+{link2_f}
+{link3_f}
+{link4_f}
 
 
-    # Script creado por QuickHabit Builder. PARA WINDOWS
-    # 2024 - https://github.com/JozefBarquero/QuickHabitBuilder
-    # ver BETA 1.0.0
+# Script creado por QuickHabit Builder. PARA WINDOWS
+# 2024 - https://github.com/JozefBarquero/QuickHabitBuilder
+# ver BETA 1.0.0
             '''
             with open(ruta_save, "w", encoding="utf-8") as archivo:
                 archivo.write(contenido)
